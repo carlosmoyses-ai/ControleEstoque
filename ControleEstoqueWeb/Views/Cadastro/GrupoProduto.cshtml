@@ -1,7 +1,50 @@
-﻿
+﻿@model List<ControleEstoqueWeb.Models.GrupoProdutoModel>
 @{
-    ViewBag.Title = "GrupoProduto";
+    ViewBag.Title = "Cadastro de Grupo de Produtos";
 }
 
-<h2>GrupoProduto</h2>
-
+<div id="cadastro">
+    <section id="cadastro_cabecalho">
+        <h1>@ViewBag.Title</h1>
+    </section>
+    <section id="cadastro_coteudo">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div id="cabecalho_grid" class="row">
+                        <a id="btn_incluir" class="btn btn-success" role="button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            Incluir
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="grid_cadastro" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Ativo</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <th>@item.Nome</th>
+                                            <th>@{var ativo = item.Ativo ? "SIM" : "NÃO";} @ativo</th>
+                                            <th>
+                                                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i>Alterar</a>
+                                                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>
+                                            </th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
