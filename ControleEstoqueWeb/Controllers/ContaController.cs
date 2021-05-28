@@ -20,14 +20,14 @@ namespace ControleEstoqueWeb.Controllers
         [HttpPost]
         public ActionResult Login(LoginViewModel login, string returnUrl)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 View(login);
             }
 
-            var achou = (login.Usuario == "carlos" && login.Senha == "123");
+            var achou = UsuarioModel.ValidarUsuario(login.Usuario, login.Senha);
 
-            if(achou)
+            if (achou)
             {
                 FormsAuthentication.SetAuthCookie(login.Usuario, login.LembrarMe);
                 if (Url.IsLocalUrl(returnUrl))
@@ -51,7 +51,7 @@ namespace ControleEstoqueWeb.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

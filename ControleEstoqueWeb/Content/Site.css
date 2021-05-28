@@ -23,6 +23,10 @@ textarea {
     max-width: 280px;
 }
 
+.container-login {
+    width: 400px;
+    margin: 0 auto;
+}
 
 .titulo {
     margin-bottom: 30px;
