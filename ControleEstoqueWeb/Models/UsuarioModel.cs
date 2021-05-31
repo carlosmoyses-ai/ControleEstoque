@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -13,7 +14,7 @@ namespace ControleEstoqueWeb.Models
             var retorno = false;
             using( var conexao = new SqlConnection())
             {
-                conexao.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=controle-estoque;Trusted_Connection=True;MultipleActiveResultSets=true";
+                conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
                 conexao.Open();
                 using(var comando = new SqlCommand())
                 {

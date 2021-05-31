@@ -35,19 +35,19 @@ namespace ControleEstoqueWeb.Controllers
         [Authorize]
         public ActionResult GrupoProduto()
         {
-            return View(_listaGrupoProduto);
+            return View(GrupoProdutoModel.RecuperarLista());
         }
 
         [HttpPost]
         [Authorize]
         public ActionResult RecuperarGrupoProduto(int id)
         {
-            return Json(_listaGrupoProduto.Find(x => x.Id == id));
+            return Json(GrupoProdutoModel.RecuperarListaPeloId(id));
         }
 
         [HttpPost]
         [Authorize]
-        public ActionResult SalvarGrupoProduto(GrupoProdutoModel modal)
+        public ActionResult SalvarGrupoProduto(GrupoProdutoModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
@@ -61,27 +61,23 @@ namespace ControleEstoqueWeb.Controllers
             {
                 try
                 {
-                    var registroBD = _listaGrupoProduto.Find(x => x.Id == modal.Id);
-                    if (registroBD == null)
+                    var id = model.Salvar();
+                    if (id > 0)
                     {
-                        registroBD = modal;
-                        registroBD.Id = _listaGrupoProduto.Max(x => x.Id) + 1;
-                        _listaGrupoProduto.Add(registroBD);
-
+                        idSalvo = id.ToString();
                     }
                     else
                     {
-                        registroBD.Nome = modal.Nome;
-                        registroBD.Ativo = modal.Ativo;
+                        resultado = "ERRO";
                     }
                 }
                 catch (Exception)
                 {
-
                     resultado = "ERRO";
                 }
             }
-            return Json(new { 
+            return Json(new
+            {
                 Resultado = resultado,
                 Mensagens = mensagens,
                 IdSalvo = idSalvo
@@ -92,15 +88,7 @@ namespace ControleEstoqueWeb.Controllers
         [Authorize]
         public ActionResult ExcluirGrupoProduto(int id)
         {
-            var ret = false;
-            var registroBD = _listaGrupoProduto.Find(x => x.Id == id);
-
-            if(registroBD != null)
-            {
-                _listaGrupoProduto.Remove(registroBD);
-                ret = true;
-            }
-            return Json(ret);
+            return Json(GrupoProdutoModel.ExcluirListaPeloId(id));
         }
 
         [Authorize]
