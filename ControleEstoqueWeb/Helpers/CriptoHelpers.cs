@@ -13,7 +13,7 @@ namespace ControleEstoqueWeb
             var retorno = string.Empty;
             for (int i = 0; i < hash.Length; i++)
             {
-                retorno += hash[i].ToString("X2");
+                retorno += hash[i].ToString("x2");
             }
             return retorno;
         }
