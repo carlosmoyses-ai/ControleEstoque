@@ -28,64 +28,62 @@
         margin-bottom: 20px;
     }
 </style>
+
 <div id="cadastro">
     <section id="cadastro_cabecalho">
         <h1>@ViewBag.Title</h1>
     </section>
     <section id="cadastro_coteudo">
+        <div id="cabecalho_grid" class="row">
+            <div class="col-md-12">
+                <a id="btn_incluir" class="btn btn-success" role="button" data-toggle="modal" data-target="#modal_cadastro">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    Incluir
+                </a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="box">
-                    <div id="cabecalho_grid" class="row">
-                        <a id="btn_incluir" class="btn btn-success" role="button" data-toggle="modal" data-target="#modal_cadastro">
-                            <i class="glyphicon glyphicon-plus"></i>
-                            Incluir
-                        </a>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table id="grid_cadastro" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Ativo</th>
-                                        <th>Ação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr data-id="@item.Id">
-                                            <th>@item.Nome</th>
-                                            <th>@{var ativo = item.Ativo ? "SIM" : "NÃO";} @ativo</th>
-                                            <th>
-                                                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i>Alterar</a>
-                                                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>
-                                            </th>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <table id="grid_cadastro" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Ativo</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.Id">
+                                <th>@item.Nome</th>
+                                <th>@{var ativo = item.Ativo ? "SIM" : "NÃO";} @ativo</th>
+                                <th>
+                                    <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i>Alterar</a>
+                                    <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>
+                                </th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
 </div>
 <!--INICIO MODAL INCLUIR-->
+@Html.Hidden("id_cadastro")
 <div id="modal_cadastro" class="form-horizontal invisivel" role="dialog">
     <fieldset>
         <div class="row">
             <div class="form-group">
-                @Html.Label("txt_nome", "Nome", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+                @Html.Label("txt_nome", "Nome", new { @class = "control-label col-md-3" })
+                <div class="col-md-13">
                     @Html.TextBox("txt_nome", null, new { @class = "form-control" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.Label("cbx_ativo", "Ativo", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+                @Html.Label("cbx_ativo", "Ativo", new { @class = "control-label col-md-3" })
+                <div class="col-md-13">
                     @Html.CheckBox("cbx_ativo")
                 </div>
             </div>
@@ -107,6 +105,7 @@
 @section Scripts {
     <script>
         function abrir_form(dados) {
+            $('#id_cadastro').val(dados.Id);
             $('#txt_nome').val(dados.Nome);
             $('#cbx_ativo').prop('checked', dados.Ativo);
 
@@ -125,6 +124,20 @@
                     modal_cadastro.hide().appendTo('body');
                 })
         }
+
+        function criar_linha_grid(dados) {
+            var ret =
+                '<tr data-id=' + dados.Id > + '>' +
+                '<th>' + dados.Nome + '</th>' +
+                '<th>' + (dados.Ativo? 'SIM' : 'NÃO') + '</th>' +
+                '<th>' +
+                '< a class="btn btn-primary btn-alterar" role = "button" > <i class="glyphicon glyphicon-pencil"></i>Alterar</a > ' +
+                '<a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>' +
+                '</th >' +
+                '</tr>';
+            return ret;
+        }
+
         $(document)
             .on('click', '#btn_incluir', function () {
                 abrir_form({ Id: 0, Nome: '', Ativo: true });
@@ -141,8 +154,64 @@
                     }
                 });
             })
+
             .on('click', '.btn-excluir', function () {
-                alert('3');
+                var btn = $(this),
+                    tr = btn.closest('tr'),
+                    id = tr.attr('data-id'),
+                    url = '@Url.Action("ExcluirGrupoProduto", "Cadastro")',
+                    param = { 'id': id };
+
+                bootbox.confirm({
+                    message: "Realmente deseja Excluir?",
+                    buttons: {
+                        confirm: {
+                            label: 'Sim',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'Não',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.post(url, param, function (response) {
+                                if (response) {
+                                    tr.remove();
+                                }
+                            });
+                        }
+                    }
+                });
+            })
+
+            .on('click', '#btn_confirmar', function () {
+                var btn = $(this),
+                    url = '@Url.Action("SalvarGrupoProduto", "Cadastro")',
+                    param = {
+                        Id: $('#id_cadastro').val(),
+                        Nome: $('#txt_nome').val(),
+                        Ativo: $('#cbx_ativo').prop('checked')
+                    };
+
+                $.post(url, param, function (response) {
+                    if (response) {
+                        if (param.Id == 0) {
+                            var table = $('#grid_cadastro').find('tbody'),
+                                linha = criar_linha_grid(response);
+
+                            table.append(linha);
+                        }
+                        else {
+                            var linha = $('#grid_cadastro').find('tr[data-id=' + param.Id + ']').find('td');
+                            linha
+                                .eq(0).html(param.Nome).end()
+                                .eq(1).html(param.Ativo ? 'SIM' : 'NÃO');
+                        }
+                        $('#modal_cadastro').parents('.bootbox').modal('hide');
+                    }
+                });
             })
     </script>
 }
