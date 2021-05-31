@@ -29,14 +29,14 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr data-id="@item.Id">
-                                <th>@item.Nome</th>
-                                <th>@{var ativo = item.Ativo ? "SIM" : "NÃO";} @ativo</th>
-                                <th>
-                                    <a class="btn btn-primary btn-alterar" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-pencil"></i>Alterar</a>
-                                    <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>
-                                </th>
-                            </tr>
+                        <tr data-id="@item.Id">
+                            <th>@item.Nome</th>
+                            <th>@{var ativo = item.Ativo ? "SIM" : "NÃO";} @ativo</th>
+                            <th>
+                                <a class="btn btn-primary btn-alterar" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-pencil"></i>Alterar</a>
+                                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>
+                            </th>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -75,7 +75,6 @@
                 </div>
             </div>
         </div>
-
     </fieldset>
 </div>
 <!--FINAL MODAL INCLUIR-->

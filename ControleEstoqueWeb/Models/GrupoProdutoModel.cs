@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -14,7 +13,6 @@ namespace ControleEstoqueWeb.Models
         public string Nome { get; set; }
 
         public bool Ativo { get; set; }
-
 
         public static List<GrupoProdutoModel> RecuperarLista()
         {
@@ -109,7 +107,7 @@ namespace ControleEstoqueWeb.Models
                         comando.CommandText = string.Format(
                             "UPDATE GRUPO_PRODUTO SET NOME= '{1}', ATIVO= {2} WHERE ID = {0}",
                             this.Id, this.Nome, this.Ativo ? 1 : 0);
-                        if(comando.ExecuteNonQuery() > 0)
+                        if (comando.ExecuteNonQuery() > 0)
                         {
                             retorno = this.Id;
                         }
